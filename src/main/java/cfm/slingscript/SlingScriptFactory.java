@@ -22,6 +22,7 @@ public class SlingScriptFactory extends AbstractScriptEngineFactory {
     private final static String ENGINE_VERSION = "0.1";
     private final static List<String> MIME_TYPES = Arrays.asList("application/x-slingscript");
     private final static List<String> EXTENSIONS = Arrays.asList("cfm");
+    private final static List<String> NAMES = Arrays.asList("cfm");
 
     private static final Logger log = LoggerFactory.getLogger(SlingScriptFactory.class);
 
@@ -53,6 +54,12 @@ public class SlingScriptFactory extends AbstractScriptEngineFactory {
     public List<String> getMimeTypes() {
         log.info("getMimeTypes called");
         return MIME_TYPES;
+    }
+
+    public List<String> getNames() {
+        log.info("getMimeTypes called");
+        return NAMES;
+
     }
 
     public ScriptEngine getScriptEngine() {

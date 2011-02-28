@@ -25,7 +25,7 @@
                             cfm.slingscript
                         </Private-Package>
                         <!--<Embed-Dependency></Embed-Dependency>-->
-                        <Import-Package>javax.jcr.*</Import-Package>
+                        <!--<Import-Package>javax.jcr.*</Import-Package>-->
                         <DynamicImport-Package>*</DynamicImport-Package>
                         <ScriptEngine-Name>${pom.name}</ScriptEngine-Name>
                         <ScriptEngine-Version>${pom.version}</ScriptEngine-Version>

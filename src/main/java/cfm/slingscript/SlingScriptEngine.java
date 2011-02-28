@@ -17,12 +17,12 @@ public class SlingScriptEngine extends AbstractSlingScriptEngine {
 
     public Object eval(String script, ScriptContext context) throws ScriptException {
         log.info("evaling {} {}", script, context);
-        return new Object();
+        throw new ScriptException("not implemented");
     }
 
     public Object eval(Reader reader, ScriptContext context) throws ScriptException {
         log.info("Initializing script engine {} {}", reader, context);
-        return new Object();
+        throw new ScriptException("not implemented");
     }
 
     public Bindings createBindings() {
