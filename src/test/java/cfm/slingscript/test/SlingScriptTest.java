@@ -18,7 +18,7 @@ public class SlingScriptTest{
 
     }
     @Test
-    public void testScript(){
+    public void testEmptyScript(){
         ScriptEngine engine = engineFactory.getScriptEngine();
         String script = "<html><head></head><body></body></html>";
         try {
@@ -28,6 +28,58 @@ public class SlingScriptTest{
         }
 
     }
+    @Test
+    public void testAttrScript(){
+        ScriptEngine engine = engineFactory.getScriptEngine();
+        String script = "<html lang=\"en\" id=\"facebook\" class=\"no_js\"><head></head><body></body></html>";
+        try {
+            Assert.assertEquals(script,engine.eval(script));
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void testValueScript(){
+        ScriptEngine engine = engineFactory.getScriptEngine();
+        String script = "<html><head></head><body>Body text</body></html>";
+        try {
+            Assert.assertEquals(script,engine.eval(script));
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void testMixedContentScript(){
+        ScriptEngine engine = engineFactory.getScriptEngine();
+        String script = "<html><head></head><body>Body text with <b>bold</b></body></html>";
+        try {
+            Assert.assertEquals(script,engine.eval(script));
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testlinkScript(){
+        ScriptEngine engine = engineFactory.getScriptEngine();
+        String script = "<html><head></head><body>Body text with <b>bold</b><a href=\"thing.html\">thing</a></body></html>";
+        try {
+            Assert.assertEquals(script,engine.eval(script));
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void testQuotes(){
+        ScriptEngine engine = engineFactory.getScriptEngine();
+        String script = "<html><head></head><body class=\"&#quote;\">Body text with \"quotes\"<b>bold</b><a href=\"thing.html\">thing</a></body></html>";
+        try {
+            Assert.assertEquals(script,engine.eval(script));
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

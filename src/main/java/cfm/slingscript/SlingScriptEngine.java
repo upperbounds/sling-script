@@ -2,13 +2,16 @@ package cfm.slingscript;
 
 import nu.validator.htmlparser.common.XmlViolationPolicy;
 import nu.validator.htmlparser.sax.HtmlParser;
+import nu.validator.htmlparser.xom.HtmlBuilder;
+import nu.xom.Document;
+import nu.xom.ParsingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.script.*;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 
 public class SlingScriptEngine extends AbstractScriptEngine {
     private static final Logger log = LoggerFactory.getLogger(SlingScriptEngine.class);
@@ -20,18 +23,20 @@ public class SlingScriptEngine extends AbstractScriptEngine {
 
     public Object eval(String script, ScriptContext context) throws ScriptException {
         log.info("evaling {} {}", script, context);
-        HtmlParser reader = new HtmlParser();
-        reader.setXmlPolicy(XmlViolationPolicy.ALLOW);
-        reader.setContentHandler(new HtmlContentHandler());
+        HtmlBuilder parser = new HtmlBuilder();
         try {
-            reader.parse(script);
+            Document doc = parser.build(new ByteArrayInputStream(script.getBytes("UTF-8")));
+            StringWriter writer = new StringWriter();
+            Html5Writer w = new Html5Writer(writer);
+            w.writeHtml(doc);
+            log.info("result: {}", writer);
+            return writer.toString();
+        } catch (ParsingException e) {
+            throw new ScriptException(e);
         } catch (IOException e) {
             throw new ScriptException(e);
-        } catch (SAXException e) {
-            throw new ScriptException(e);
         }
-        //rootElem
-        return script;
+
     }
 
     public Object eval(Reader reader, ScriptContext context) throws ScriptException {
