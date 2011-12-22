@@ -5,17 +5,26 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptException;
+import javax.script.*;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SlingScriptTest {
 
     ScriptEngineFactory engineFactory;
 
+    ScriptContext context;
+
+    StringWriter sw;
+
     @Before
     public void setUp() {
         engineFactory = new GenericEngineFactory();
+        context = new SimpleScriptContext();
+        sw = new StringWriter();
+        context.setWriter(sw);
 
     }
 
@@ -24,7 +33,10 @@ public class SlingScriptTest {
         ScriptEngine engine = engineFactory.getScriptEngine();
         String script = "<html><head></head><body></body></html>";
         try {
-            Assert.assertEquals(script, engine.eval(script));
+
+            engine.eval(new StringReader(script), context);
+
+            Assert.assertEquals(script, sw.toString());
         } catch (ScriptException e) {
             e.printStackTrace();
         }
@@ -36,7 +48,8 @@ public class SlingScriptTest {
         ScriptEngine engine = engineFactory.getScriptEngine();
         String script = "<html lang=\"en\" id=\"facebook\" class=\"no_js\"><head></head><body></body></html>";
         try {
-            Assert.assertEquals(script, engine.eval(script));
+            engine.eval(new StringReader(script), context);
+            Assert.assertEquals(script, sw.toString());
         } catch (ScriptException e) {
             e.printStackTrace();
         }
@@ -47,7 +60,8 @@ public class SlingScriptTest {
         ScriptEngine engine = engineFactory.getScriptEngine();
         String script = "<html><head></head><body>Body text</body></html>";
         try {
-            Assert.assertEquals(script, engine.eval(script));
+            engine.eval(new StringReader(script), context);
+            Assert.assertEquals(script, sw.toString());
         } catch (ScriptException e) {
             e.printStackTrace();
         }
@@ -58,7 +72,8 @@ public class SlingScriptTest {
         ScriptEngine engine = engineFactory.getScriptEngine();
         String script = "<html><head></head><body>Body text with <b>bold</b></body></html>";
         try {
-            Assert.assertEquals(script, engine.eval(script));
+            engine.eval(new StringReader(script), context);
+            Assert.assertEquals(script, sw.toString());
         } catch (ScriptException e) {
             e.printStackTrace();
         }
@@ -69,7 +84,8 @@ public class SlingScriptTest {
         ScriptEngine engine = engineFactory.getScriptEngine();
         String script = "<html><head></head><body>Body text with <b>bold</b><a href=\"thing.html\">thing</a></body></html>";
         try {
-            Assert.assertEquals(script, engine.eval(script));
+            engine.eval(new StringReader(script), context);
+            Assert.assertEquals(script, sw.toString());
         } catch (ScriptException e) {
             e.printStackTrace();
         }
@@ -80,7 +96,8 @@ public class SlingScriptTest {
         ScriptEngine engine = engineFactory.getScriptEngine();
         String script = "<html><head></head><body class=\"&#quote;\">Body text with \"quotes\"<b>bold</b><a href=\"thing.html\">thing</a></body></html>";
         try {
-            Assert.assertEquals(script, engine.eval(script));
+            engine.eval(new StringReader(script), context);
+            Assert.assertEquals(script, sw.toString());
         } catch (ScriptException e) {
             e.printStackTrace();
         }
@@ -89,9 +106,10 @@ public class SlingScriptTest {
 //    @Test
     public void testNamespaces() {
         ScriptEngine engine = engineFactory.getScriptEngine();
-        String script = "<html lang=\"en-us\" dir=\"ltr\" xmlns=\"http://www.w3.org/1999/xhtml\"><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></meta></head><body></body></html>";
+        String script = "<html lang=\"en-us\" dir=\"ltr\" xmlns:fb=\"http://www.facebook.com/2008/fbml\"><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></meta></head><body></body></html>";
         try {
-            Assert.assertEquals(script, engine.eval(script));
+            engine.eval(new StringReader(script), context);
+            Assert.assertEquals(script, sw.toString());
         } catch (ScriptException e) {
             e.printStackTrace();
         }

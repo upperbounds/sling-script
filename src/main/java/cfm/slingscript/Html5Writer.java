@@ -16,12 +16,18 @@ public class Html5Writer {
     }
 
     public void writeHtml(Document document) throws IOException {
+
         writeElement(document.getDocumentElement());
 
     }
 
     private void writeAttributes(Node element) throws IOException {
         NamedNodeMap nodes = element.getAttributes();
+        if (element instanceof Element) {
+            Element e = (Element) element;
+           e.getPrefix();
+            //log.info("im ab eliment {}", e.getAttributeNS(null, e.getTagName()));
+        }
         if (null != nodes) {
             for (int i = nodes.getLength() - 1; i > -1; i--) { // fragile assumption about attribute ordering that isn't guaranteed
                 Node attribute = nodes.item(i);
@@ -30,6 +36,8 @@ public class Html5Writer {
                 writer.write(attribute.getLocalName() + "=" + "\"" + attribute.getNodeValue() + "\"");
             }
         }
+        //log.info("namespace {}", element.lookupNamespaceURI(null));
+
     }
 
     private void writeElement(Node element) throws IOException {
@@ -41,6 +49,8 @@ public class Html5Writer {
         } else {
             writer.write(element.getTextContent());
         }
+
+
 
         NodeList children = element.getChildNodes();
 
