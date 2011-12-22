@@ -30,6 +30,7 @@
                         <DynamicImport-Package>*</DynamicImport-Package>
                         <ScriptEngine-Name>${pom.name}</ScriptEngine-Name>
                         <ScriptEngine-Version>${pom.version}</ScriptEngine-Version>
+                        <Sling-Initial-Content>initial-content;overwrite:=true</Sling-Initial-Content>
                     </instructions>
                 </configuration>
             </plugin>
@@ -61,7 +62,7 @@
                 <artifactId>maven-sling-plugin</artifactId>
                 <version>2.0.2-incubator</version>
                 <configuration>
-                    <obr>http://localhost:4502/system/console/install</obr>
+                    <obr>http://localhost:8080/system/console/install</obr>
                 </configuration>
                 <executions>
                     <execution>
@@ -70,7 +71,7 @@
                             <goal>install</goal>
                         </goals>
                         <configuration>
-                            <slingUrl>http://localhost:4502/system/console/install</slingUrl>
+                            <slingUrl>http://localhost:8080/system/console/install</slingUrl>
                             <user>admin</user>
                             <password>admin</password>
                         </configuration>
