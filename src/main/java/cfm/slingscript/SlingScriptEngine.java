@@ -1,12 +1,10 @@
 package cfm.slingscript;
 
 import nu.validator.htmlparser.common.XmlViolationPolicy;
-import nu.validator.htmlparser.sax.HtmlParser;
-import nu.validator.htmlparser.xom.HtmlBuilder;
-import nu.xom.Document;
-import nu.xom.ParsingException;
+import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -22,26 +20,38 @@ public class SlingScriptEngine extends AbstractScriptEngine {
     }
 
     public Object eval(String script, ScriptContext context) throws ScriptException {
-        log.info("evaling {} {}", script, context);
-        HtmlBuilder parser = new HtmlBuilder();
-        try {
-            Document doc = parser.build(new ByteArrayInputStream(script.getBytes("UTF-8")));
-            StringWriter writer = new StringWriter();
-            Html5Writer w = new Html5Writer(writer);
-            w.writeHtml(doc);
-            log.info("result: {}", writer);
-            return writer.toString();
-        } catch (ParsingException e) {
-            throw new ScriptException(e);
-        } catch (IOException e) {
-            throw new ScriptException(e);
-        }
-
+        log.info("eval'ing {} {}", script, context);
+        return eval(new StringReader(script), context);
     }
 
     public Object eval(Reader reader, ScriptContext context) throws ScriptException {
         log.info("Initializing script engine {} {}", reader, context);
-        throw new ScriptException("not implemented");
+
+        // instantiate and configure the parser with default policies
+        HtmlDocumentBuilder parser = new HtmlDocumentBuilder();
+//        HtmlBuilder parser = new HtmlBuilder(XmlViolationPolicy.ALLOW);
+//        parser.setCommentPolicy(XmlViolationPolicy.ALLOW);
+//        parser.setContentNonXmlCharPolicy(XmlViolationPolicy.ALLOW);
+        parser.setContentSpacePolicy(XmlViolationPolicy.FATAL);
+//        parser.setNamePolicy(XmlViolationPolicy.ALLOW);
+
+        try {
+
+            try {
+
+                Document doc = parser.parse(new InputSource(reader));
+                StringWriter writer = new StringWriter();
+                Html5Writer w = new Html5Writer(writer);
+                w.writeHtml(doc);
+                log.info("result: {}", writer);
+                return writer.toString();
+            } catch (SAXException e) {
+                throw new ScriptException(e);
+            }
+        } catch (IOException e) {
+            throw new ScriptException(e);
+        }
+
     }
 
     public Bindings createBindings() {

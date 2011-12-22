@@ -12,6 +12,7 @@
     <packaging>bundle</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <scala.version>2.9.1</scala.version>
     </properties>
     <build>
         <plugins>
@@ -24,8 +25,8 @@
                         <Private-Package>
                             cfm.slingscript
                         </Private-Package>
-                        <!--<Embed-Dependency></Embed-Dependency>-->
-                        <!--<Import-Package>javax.jcr.*</Import-Package>-->
+                        <Embed-Dependency>htmlparser</Embed-Dependency>
+                        <Import-Package>nu.validator.htmlparser.*</Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
                         <ScriptEngine-Name>${pom.name}</ScriptEngine-Name>
                         <ScriptEngine-Version>${pom.version}</ScriptEngine-Version>
@@ -75,6 +76,10 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
@@ -142,16 +147,17 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>xom</groupId>
-            <artifactId>xom</artifactId>
-            <version>1.2.5</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.8.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-compiler</artifactId>
+            <version>${scala.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

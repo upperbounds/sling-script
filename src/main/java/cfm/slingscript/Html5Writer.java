@@ -1,8 +1,8 @@
 package cfm.slingscript;
 
-import nu.xom.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.*;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -16,38 +16,39 @@ public class Html5Writer {
     }
 
     public void writeHtml(Document document) throws IOException {
-        writeElement(document.getRootElement());
+        writeElement(document.getDocumentElement());
 
     }
 
-    private void writeAttributes(Element element) throws IOException {
-        for (int i = 0; i < element.getAttributeCount(); i++) {
-            Attribute attribute = element.getAttribute(i);
-            writer.write(" ");
-            writer.write(attribute.getLocalName() + "=" + "\"" + attribute.getValue() + "\"");
-        }
-    }
+    private void writeAttributes(Node element) throws IOException {
+        NamedNodeMap nodes = element.getAttributes();
+        if (null != nodes) {
+            for (int i = nodes.getLength() - 1; i > -1; i--) { // fragile assumption about attribute ordering that isn't guaranteed
+                Node attribute = nodes.item(i);
 
-    private void writeElement(Element element) throws IOException {
-
-        writer.write("<" + element.getLocalName());
-        writeAttributes(element);
-        writer.write(">");
-        if (element.getChildElements().size() > 0) {
-            Node text = element.getChild(0);
-            if (text instanceof Text) {
-                writer.write(text.getValue());
+                writer.write(" ");
+                writer.write(attribute.getLocalName() + "=" + "\"" + attribute.getNodeValue() + "\"");
             }
         }
+    }
 
-        if (element.getChildElements().size() == 0) {
-            writer.write(element.getValue());
-        }
-        Elements elements = element.getChildElements();
-        for (int i = 0; i < elements.size(); i++) {
-            writeElement(elements.get(i));
+    private void writeElement(Node element) throws IOException {
+
+        if (null != element.getLocalName()) {
+            writer.write("<" + element.getLocalName());
+            writeAttributes(element);
+            writer.write(">");
+        } else {
+            writer.write(element.getTextContent());
         }
 
-        writer.write("</" + element.getLocalName() + ">");
+        NodeList children = element.getChildNodes();
+
+        for (int i = 0; i < children.getLength(); i++) {
+            writeElement(children.item(i));
+        }
+        if (null != element.getLocalName()) {
+            writer.write("</" + element.getLocalName() + ">");
+        }
     }
 }
