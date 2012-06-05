@@ -103,7 +103,7 @@ public class SlingScriptTest {
         }
     }
 
-//    @Test
+    //    @Test
     public void testNamespaces() {
         ScriptEngine engine = engineFactory.getScriptEngine();
         String script = "<html lang=\"en-us\" dir=\"ltr\" xmlns:fb=\"http://www.facebook.com/2008/fbml\"><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></meta></head><body></body></html>";
@@ -115,5 +115,17 @@ public class SlingScriptTest {
         }
     }
 
+    @Test
+    public void testBinding() {
+        ScriptEngine engine = engineFactory.getScriptEngine();
+        String script = "<html><body><bind tag=\"longname\">binding text</bind><p>text1<longname/>text2<longname/>text3<longname/></body></html>";
+        String result = "<html><head></head><body>binding text</bind><p>text1binding texttext2binding texttext3binding text</body></html>";
+        try {
+            engine.eval(new StringReader(script), context);
+            Assert.assertEquals(script, result);
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

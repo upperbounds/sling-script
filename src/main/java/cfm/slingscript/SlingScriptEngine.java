@@ -5,10 +5,13 @@ import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.script.*;
+import javax.xml.stream.events.NotationDeclaration;
 import java.io.*;
 
 public class SlingScriptEngine extends AbstractScriptEngine {
@@ -40,6 +43,26 @@ public class SlingScriptEngine extends AbstractScriptEngine {
             try {
 
                 Document doc = parser.parse(new InputSource(reader));
+
+                NodeList nodes = doc.getElementsByTagName("bind");
+                for (int i = 0; i < nodes.getLength(); i++) {
+                    Node node = nodes.item(i);
+                    Node tag = node.getAttributes().getNamedItem("tag");
+
+                    NodeList replaces = doc.getElementsByTagName(tag.getNodeName());
+                    for (int a = 0; i < replaces.getLength(); a++) {
+                        Node replace = replaces.item(a);
+                        //doc.replaceChild(tag, replace);
+
+
+                    }
+                    node.getParentNode().removeChild(node);
+
+                    //log.info("node is {} tag text is {}", tag.getNodeName(), tag.getTextContent());
+
+
+                }
+
                 Writer writer = context.getWriter();
                 Html5Writer w = new Html5Writer(writer);
                 w.writeHtml(doc);

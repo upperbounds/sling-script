@@ -71,7 +71,7 @@
                             <goal>install</goal>
                         </goals>
                         <configuration>
-                            <slingUrl>http://localhost:8080/system/console/install</slingUrl>
+                            <slingUrl>http://localhost:4502/system/console/install</slingUrl>
                             <user>admin</user>
                             <password>admin</password>
                         </configuration>
