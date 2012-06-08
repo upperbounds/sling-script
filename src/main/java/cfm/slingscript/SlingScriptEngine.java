@@ -49,14 +49,37 @@ public class SlingScriptEngine extends AbstractScriptEngine {
                     Node node = nodes.item(i);
                     Node tag = node.getAttributes().getNamedItem("tag");
 
-                    NodeList replaces = doc.getElementsByTagName(tag.getNodeName());
-                    for (int a = 0; i < replaces.getLength(); a++) {
-                        Node replace = replaces.item(a);
-                        //doc.replaceChild(tag, replace);
 
+                    String t = tag.getNodeValue();
+                    NodeList replaces = doc.getElementsByTagName(tag.getNodeValue());
+                    log.info("about to replace {} with {}", tag.getNodeName(), tag.getNodeValue());
+                    log.info("replaces is size of {}", replaces.getLength());
+
+                    Node n = node.getParentNode().removeChild(node);
+                    for (int a = 0; a < replaces.getLength(); a++) {
+
+                        log.info("replacing content with {}", node.getTextContent());
+                        Node replace = replaces.item(a);
+
+
+//                        Node n2 = replace.getParentNode().replaceChild(n, replace);
+                        Node par = replace.getParentNode();
+                        Node n2 = replace.getParentNode().removeChild(replace);
+
+                        for (int b = 0; b < n.getChildNodes().getLength(); b++) {
+                            log.info("doing an add of {}", n.getChildNodes().item(b));
+                            par.appendChild(n.getChildNodes().item(b));
+
+                        }
+//                        for(int b = 0; b < replace.getChildNodes().getLength(); b ++){
+//                            replace.getParentNode().appendChild(replace.getChildNodes().item(b));
+//                        }
+//                        replace.getParentNode().removeChild(replace);
+//                        replace.getParentNode().appendChild(n)
+//                        doc.replaceChild(tag, replace);
 
                     }
-                    node.getParentNode().removeChild(node);
+
 
                     //log.info("node is {} tag text is {}", tag.getNodeName(), tag.getTextContent());
 

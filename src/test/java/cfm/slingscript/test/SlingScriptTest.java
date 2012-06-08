@@ -118,11 +118,11 @@ public class SlingScriptTest {
     @Test
     public void testBinding() {
         ScriptEngine engine = engineFactory.getScriptEngine();
-        String script = "<html><body><bind tag=\"longname\">binding text</bind><p>text1<longname/>text2<longname/>text3<longname/></body></html>";
-        String result = "<html><head></head><body>binding text</bind><p>text1binding texttext2binding texttext3binding text</body></html>";
+        String script = "<html><body><bind tag=\"longname\"><p>binding text</p></bind>text1<longname/>text2</body></html>";
+        String result = "<html><head></head><body>text1<p>binding text</p>text2</body></html>";
         try {
             engine.eval(new StringReader(script), context);
-            Assert.assertEquals(script, result);
+            Assert.assertEquals(result, sw.toString());
         } catch (ScriptException e) {
             e.printStackTrace();
         }
