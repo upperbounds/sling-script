@@ -61,8 +61,6 @@ public class SlingScriptEngine extends AbstractScriptEngine {
                         log.info("replacing content with {}", node.getTextContent());
                         Node replace = replaces.item(a);
 
-
-//                        Node n2 = replace.getParentNode().replaceChild(n, replace);
                         Node par = replace.getParentNode();
                         Node n2 = replace.getParentNode().removeChild(replace);
 
@@ -71,18 +69,10 @@ public class SlingScriptEngine extends AbstractScriptEngine {
                             par.appendChild(n.getChildNodes().item(b));
 
                         }
-//                        for(int b = 0; b < replace.getChildNodes().getLength(); b ++){
-//                            replace.getParentNode().appendChild(replace.getChildNodes().item(b));
-//                        }
-//                        replace.getParentNode().removeChild(replace);
-//                        replace.getParentNode().appendChild(n)
-//                        doc.replaceChild(tag, replace);
-
+                        for (int z = 0; z < n2.getChildNodes().getLength(); z++) {
+                            par.appendChild(n2.getChildNodes().item(z));
+                        }
                     }
-
-
-                    //log.info("node is {} tag text is {}", tag.getNodeName(), tag.getTextContent());
-
 
                 }
 
